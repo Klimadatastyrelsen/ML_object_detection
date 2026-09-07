@@ -18,7 +18,6 @@ Maintained by the Danish Climate Data Agency for Bounding Box Detection on Obliq
     mamba env create -f environment.yml
     mamba activate  ML_object_detection
     ```  
-  
 
 ## Example use
 *   Use the included model for inference on one small and one large image from the included set of example images
@@ -68,7 +67,25 @@ The [KDS objects in oblique images](https://huggingface.co/datasets/rasmuspjohan
    ```sh
    python src/ML_object_detection/train.py --data ./KDS_objects/dataset.yaml
    ```
-   Add other options as needed (e.g. `--epochs`, `--imgsz`, `--weights`).
+   Useful flags (defaults match the windmill training setup where noted):
+
+   | Flag | Default | Meaning |
+   |------|---------|---------|
+   | `--weights` | `yolov8n.pt` | Starting checkpoint |
+   | `--epochs` | `100` | Training length |
+   | `--imgsz` | `640` | Image size (match your chips) |
+   | `--device` | `cuda:0` | GPU / CPU |
+   | `--degrees` | `180` | Rotation augmentation ±degrees |
+   | `--project` | `runs/detect` | Output root |
+   | `--name` | `windmill_run` | Run folder; if it exists, Ultralytics uses `windmill_run2`, etc. |
+
+   Example:
+   ```sh
+   python src/ML_object_detection/train.py \
+     --data ./KDS_objects/dataset.yaml \
+     --name my_experiment \
+     --epochs 50
+   ```
 
 ### Download labelme format and convert to YOLO for training
 

@@ -38,14 +38,7 @@ The [KDS objects in oblique images](https://huggingface.co/datasets/rasmuspjohan
 
 2. **Download the dataset** (e.g. into a folder named `KDS_objects`):
    ```sh
-   python -c "
-   from huggingface_hub import snapshot_download
-   snapshot_download(
-       repo_id=\"rasmuspjohansson/KDS_objects_in_oblique_images\",
-       repo_type=\"dataset\",
-       local_dir=\"./KDS_objects\"
-   )
-   "
+   python -c "from huggingface_hub import snapshot_download; snapshot_download(repo_id='rasmuspjohansson/KDS_objects_in_oblique_images', repo_type='dataset', local_dir='./KDS_objects')"
    ```
    Or clone the repo: `git clone https://huggingface.co/datasets/rasmuspjohansson/KDS_objects_in_oblique_images KDS_objects`
 

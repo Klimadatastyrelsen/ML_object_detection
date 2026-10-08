@@ -4,6 +4,19 @@ Maintained by the Danish Climate Data Agency for Bounding Box Detection on Obliq
 
 <img width="1124" height="1125" alt="image" src="https://github.com/user-attachments/assets/69aa5ca9-ac97-4a4b-98d5-b0820fc07f3c" />
 
+## Repo map
+
+This is a **library**: training and sliced inference, plus the bundled example
+dataset of KDS objects in oblique images. Project repos hold the data paths,
+models and campaign history for one detection task, and use this library
+through the shared `ML_object_detection` conda environment.
+
+| Repo | Kind | Purpose |
+| --- | --- | --- |
+| **ML_object_detection** (this repo) | Library | Train a YOLO detector; sliced inference on folders of images |
+| [ML_object_detection_production](https://github.com/Klimadatastyrelsen/ML_object_detection_production) | Library | Run a trained detector over a national tile grid |
+| [danish-historical-map-yolo](https://github.com/rasmuspjohansson/danish-historical-map-yolo) | Project | `engtotter`, `lyng`, `siv`, `mosepolygoner`, `vandlinjer` on Høje Målebordsblade |
+| `ML_windmill_detection` | Project | Windmills on OrtoRGB |
 
 ## Installation
 
@@ -121,7 +134,7 @@ The same dataset is also provided in [labelme](https://github.com/wkentaro/label
 * split the images to sizes suitable for yolo
   
     ```sh
-    python split_with_gdal.py --image /path/to/large/images --output dataset/folder --x 640 --y 640 --overlap 40
+    python src/ML_object_detection/split_with_gdal.py --image /path/to/large/images --output dataset/folder --x 640 --y 640 --overlap 40
     ```
 *   Create a dataset with labelme
   
@@ -131,25 +144,21 @@ The same dataset is also provided in [labelme](https://github.com/wkentaro/label
     
     OBS. All objects of the categoriez you want to detect needs to be marked up. Partly labeled images will ruin the training.
 
-*   (optional) set all "unkown"/"ignore" areas to black
-  
-    If you labeled areas with the text "ignore" (e.g areas for wich you are unsure about the correct classification) we have the option to mask all these areas and make them black.
-    Calling mask_unknown_regions.py with -h flag will give more instructions on usage
-
-
 * copy all data to a new location before doing the next steps
 
-    note: draw rectangles from the upper left corner to the lower right corner
+*   (optional) set all "unknown"/"ignore" areas to black
 
-*   (optional) set all "unknown"/"ignore" areas to black:
+    If you labeled areas with the text "ignore" (e.g areas for wich you are unsure about the correct classification) we have the option to mask all these areas and make them black.
+
     ```sh
     python src/ML_object_detection/mask_unknown_regions.py -h
     ```
 
 *    make sure that all .json files use the same format (original .tif image)
 
-    
-    python standardize_json.py --json_dir /mnt/T/mnt/trainingdata/object_detection/from_Fdrev_ampol/all/
+    ```sh
+    python src/ML_object_detection/standardize_json.py --json_dir /mnt/T/mnt/trainingdata/object_detection/from_Fdrev_ampol/all/
+    ```
     
 *   convert the labelme dataset to yolo format with 
 
@@ -160,7 +169,7 @@ The same dataset is also provided in [labelme](https://github.com/wkentaro/label
 *   Train a object detection model on the dataset 
 
     ```sh
-    python train.py --data /path/to/labelme_json_dir/config.yml
+    python src/ML_object_detection/train.py --data /path/to/labelme_json_dir/config.yml
     e.g  python src/ML_object_detection/train.py --data /mnt/T/mnt/trainingdata/object_detection/object_detection_dataset/2025-06-16/labelme_images/YOLODataset/dataset.yaml
     ```    
 *   Use the model for inference on large (unsplitted images) (e.g for creating sugestions for new labels) 

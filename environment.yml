@@ -7,10 +7,13 @@ dependencies:
   - gdal
   - geopandas
   - fiona
+  - numpy
   - pillow
   - pandas
   - psutil
   - rasterio
+  - shapely
+  - tqdm
   - memory_profiler
   - pip
   - pip:
